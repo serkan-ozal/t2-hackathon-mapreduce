@@ -24,6 +24,8 @@ Projeyi build etmek için gerekli komutlar proje dizinindeki `build.sh` dosyası
 
 Deploy sonucu size ait olan Map/Reduce job jar dosyası `t2-hackathon-mapreduce-[Your AWS Account No]` dizininde oluşacaktır. Bu dizini deploy yapmadan önce oluşturmanız gerekmektedir. Bu dizini [https://console.aws.amazon.com/s3](https://console.aws.amazon.com/s3) adresinden **S3** üzerinde **Create Bucket** diyerek oluşturabilirsiniz.
 
+**4.** Map/Reduce job'ını nasıl başlatacağınız ile ilgili gerekli bilgiyi [http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-launch-custom-jar-cli.html](http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-launch-custom-jar-cli.html) adresinden bulabilirsiniz.
+
 Soru
 -----------
 `s3n://t2-hackathon-mapreduce/input/input.txt` dosyasında bulunan sayılar incelenerek her bir sayının kaç kere geçtiğini bulan bir Map/Reduce uygulamasını yazınız. 
