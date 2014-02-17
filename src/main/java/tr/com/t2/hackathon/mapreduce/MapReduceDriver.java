@@ -42,14 +42,16 @@ public class MapReduceDriver {
 		
 		JobConf conf = new JobConf();
 		
-		Job job = new Job(conf, "NumberCounter");
-		
 		// Use SPACE instead of TAB as separator between key and value at output
 		conf.set("mapred.textoutputformat.separator", " "); // Prior to Hadoop 2 (YARN)
-        conf.set("mapreduce.textoutputformat.separator", " ");  // Hadoop v2+ (YARN)
-        conf.set("mapreduce.output.textoutputformat.separator", " ");
-        conf.set("mapreduce.output.key.field.separator", " ");
-        conf.set("mapred.textoutputformat.separatorText", " "); 
+		conf.set("mapreduce.textoutputformat.separator", " ");  // Hadoop v2+ (YARN)
+		conf.set("mapreduce.output.textoutputformat.separator", " ");
+		conf.set("mapreduce.output.key.field.separator", " ");
+		conf.set("mapred.textoutputformat.separatorText", " "); 
+		
+		// *** NOTE ***: Update configuration before passing configuration to job as parameter
+		
+		Job job = new Job(conf, "NumberCounter");
 		
 		job.setJarByClass(MapReduceDriver.class);
 		 
