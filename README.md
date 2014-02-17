@@ -22,6 +22,8 @@ kısımında kendi hesabınıza ait değerleri girmelisiniz. [https://portal.aws
 
 Projeyi build etmek için gerekli komutlar proje dizinindeki `build.sh` dosyasında, deploy etmek için gerekli komutlar da `deploy.sh` dosyasında bulunmaktadır.
 
+Deploy sonucu size ait olan Map/Reduce job jar dosyası `t2-hackathon-mapreduce-[Your AWS Account No]` dizininde oluşacaktır. Bu dizini deploy yapmadan önce oluşturmanız gerekmektedir. Bu dizini [https://console.aws.amazon.com/s3](https://console.aws.amazon.com/s3) adresinden **S3** üzerinde **Create Bucket** diyerek oluşturabilirsiniz.
+
 Soru
 -----------
 `s3n://t2-hackathon-mapreduce/input/input.txt` dosyasında bulunan sayılar incelenerek her bir sayının kaç kere geçtiğini bulan bir Map/Reduce uygulamasını yazınız. 
