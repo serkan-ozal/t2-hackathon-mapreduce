@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
@@ -24,7 +23,7 @@ import org.apache.log4j.Logger;
  * Reduce implementation of Map/Reduce job.
  * Gets partial intermediate results as grouped and generates its result.
  */
-public class NumberCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+public class NumberCountReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
 
 	private static final Logger logger = Logger.getLogger(NumberCountReducer.class); 
     
@@ -43,7 +42,7 @@ public class NumberCountReducer extends Reducer<Text, IntWritable, Text, IntWrit
     	}
     }
 
-    protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+    protected void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 		try {
 			int sum = 0;
 			Iterator<IntWritable> i = values.iterator();
