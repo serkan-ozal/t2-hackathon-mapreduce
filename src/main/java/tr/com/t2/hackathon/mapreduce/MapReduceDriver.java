@@ -75,10 +75,16 @@ public class MapReduceDriver {
 		
 		// If output directory already exists, first remove it
 		FileSystem outputFS = outputPath.getFileSystem(conf);
-		if (outputFS.exists(outputPath)) {
-			outputFS.delete(outputPath, true);
-			logger.info("Deleting existing output path: " + outputPath.getName());
+		while (true) {
+			if (outputFS.exists(outputPath)) {
+				outputFS.delete(outputPath, true);
+				Thread.sleep(1000); 
+			}
+			else {
+				break;
+			}
 		}
+		logger.info("Deleted existing output path: " + outputPath.toUri().toString());
 
 		////////////////////////////////////////////////////////////////////////////////////
 		
