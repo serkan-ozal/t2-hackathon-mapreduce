@@ -1,0 +1,251 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tr.com.t2</groupId>
+  <artifactId>t2-hackathon-mapreduce</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>T2 Big Data Hackathon MapReduce</name>
+  
+  <properties>
+  
+		<aws.accessKey>[Your AWS Access Key]</aws.accessKey>
+		<aws.secretKey>[Your AWS Secret Key]</aws.secretKey>
+		<aws.accountNo>[Your AWS Account No]</aws.accountNo>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+
+		<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
+        <maven.source.plugin.version>2.1.2</maven.source.plugin.version>
+        <maven.resources.plugin.version>2.4</maven.resources.plugin.version>
+        <maven.beanstalk.plugin.version>1.0.1</maven.beanstalk.plugin.version>
+        <maven.shade.plugin.version>2.1</maven.shade.plugin.version>
+        <maven.aws.plugin.version>4.4.0.RELEASE</maven.aws.plugin.version>
+        
+        <hadoop.version>2.2.0</hadoop.version>
+        <mrunit.version>0.8.0-incubating</mrunit.version>
+        <log4j.version>1.2.17</log4j.version>
+		<commons.version>1.3.2</commons.version>
+		<commons.logging.version>1.1.2</commons.logging.version>
+        <commons.io.version>2.4</commons.io.version>
+        <commons.lang.version>2.6</commons.lang.version>
+        <commons.collections.version>3.2.1</commons.collections.version>
+        
+        <mainClass>tr.com.t2.hackathon.mapreduce.MapReduceDriver</mainClass>
+  		<finalName>hackathon-mapreduce-job</finalName>
+  		<finalFileName>${finalName}.jar</finalFileName>
+  		<targetBucketName>t2-hackathon-mapreduce-${aws.accountNo}</targetBucketName>
+
+	</properties>
+  
+  	<build>
+  	
+		<plugins>
+
+			<!-- Maven Compiler Plugin                  -->
+			<!-- ====================================== -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<excludes>
+						<exclude>javax/servlet/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- ====================================== -->
+
+
+
+			<!-- Maven Source Plugin                    -->
+			<!-- ====================================== -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- ====================================== -->
+
+
+
+			<!-- Maven Resouces Plugin                  -->
+			<!-- ====================================== -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<!-- ====================================== -->
+
+
+
+			<!-- Maven Assembly Plugin                  -->
+			<!-- ====================================== -->
+        	<plugin>
+      			<artifactId>maven-assembly-plugin</artifactId>
+		      	<configuration>
+		      		<finalName>hackathon-mapreduce-assemblied</finalName>
+		      		<appendAssemblyId>false</appendAssemblyId>
+			        <archive>
+			          	<manifest>
+			            	<mainClass>${mainClass}</mainClass>
+			          	</manifest>
+			        </archive>
+					<descriptorRefs>
+			          	<descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>
+		      	</configuration>
+		    </plugin>
+		    <!-- ====================================== -->
+		    
+		    
+		    
+		    <!-- Maven Shade Plugin                     -->
+			<!-- ====================================== -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-shade-plugin</artifactId>
+        		<version>${maven.shade.plugin.version}</version>
+        		<executions>
+          			<execution>
+	            		<phase>package</phase>
+	            		<goals>
+	              			<goal>shade</goal>
+	            		</goals>
+	            		<configuration>
+	            			<finalName>${finalName}</finalName>
+	              			<transformers>
+	              				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>${mainClass}</mainClass>
+								</transformer>
+	              			</transformers>
+	            		</configuration>
+          			</execution>
+        		</executions>
+      		</plugin>
+      		<!-- ====================================== -->
+      		
+      		
+      		
+      		<!-- Maven Beanstalk Plugin                 -->
+			<!-- ====================================== -->
+      		<plugin>
+	     		<groupId>br.com.ingenieux</groupId>
+	      		<artifactId>beanstalk-maven-plugin</artifactId>
+	      		<version>${maven.beanstalk.plugin.version}</version>
+	      		<configuration>
+	        		<accessKey>${aws.accessKey}</accessKey>
+	        		<secretKey>${aws.secretKey}</secretKey>
+	        		<applicationName>${finalName}</applicationName>
+	          		<s3Bucket>${targetBucketName}</s3Bucket>
+	          		<s3Key>${finalFileName}</s3Key>
+	          		<artifactFile>target/${finalFileName}</artifactFile>
+	     	 	</configuration>
+	    	</plugin>
+		    
+  		</plugins>
+  		<!-- ====================================== -->
+  		
+  		<extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>${maven.aws.plugin.version}</version>
+            </extension>
+        </extensions>
+
+	</build>
+	
+	<dependencies>
+		
+		<!-- Apache Hadoop Client                   -->
+	  	<!-- ====================================== -->
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- ====================================== -->
+		
+		
+		
+		<!-- Logging                                -->
+		<!-- ====================================== -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<!-- ====================================== -->
+
+
+
+		<!-- Apache Commons                         -->
+		<!-- ====================================== -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons.lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons.logging.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${commons.collections.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+		<!-- ====================================== -->
+		
+		
+		
+		<!-- Apache Hadoop MRUnit                   -->
+		<!-- ====================================== -->
+		<dependency>
+			<groupId>org.apache.mrunit</groupId>
+			<artifactId>mrunit</artifactId>
+			<version>${mrunit.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- ====================================== -->
+		
+	</dependencies>	
+	
+	<repositories>
+        <repository>
+            <id>nexus-maven-repository</id>
+            <url>https://maven-us.nuxeo.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-maven-repository</id>
+            <url>https://maven-us.nuxeo.org/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+	
+</project>
